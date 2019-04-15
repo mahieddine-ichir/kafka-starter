@@ -6,7 +6,6 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.IntegerSerializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,24 +23,24 @@ public class ProducerApplication {
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
-        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerdes.JsonSerializer.class);
         //properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 32*1024*1024);
         //properties.put(ProducerConfig.LINGER_MS_CONFIG, 100);
 
-        KafkaProducer<Integer, String> producer = new KafkaProducer<Integer, String>(properties);
+        KafkaProducer<Integer, Envelope> producer = new KafkaProducer<>(properties);
+        Runtime.getRuntime().addShutdownHook(new Thread(producer::close));
 
         while (true) {
 
             int i = (int) Math.floor(Math.random() * (envelopes.size() - 1));
             Envelope envelope = envelopes.get(i);
             envelope.setStatus(Envelope.State.values()[i%Envelope.State.values().length]);
-            String value = objectMapper.writeValueAsString(envelope);
 
-            ProducerRecord<Integer, String> record = new ProducerRecord<>(TOPIC, envelope.getId(), value);
+            ProducerRecord<Integer, Envelope> record = new ProducerRecord<>(TOPIC, envelope.getId(), envelope);
             System.out.println("Sending "+envelope);
 
             producer.send(record);
-            Thread.sleep(100);
+            Thread.sleep(3000);
         }
     }
 

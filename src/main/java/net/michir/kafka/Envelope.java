@@ -19,6 +19,8 @@ public class Envelope {
 
     private State status = State.CREE;
 
+    private String libelle;
+
     private PostalAddress postalAddress;
 
 

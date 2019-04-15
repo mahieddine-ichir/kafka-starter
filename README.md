@@ -34,3 +34,13 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 1. Lancer `StreamApplication`
 
 2. Copier la sortie console sous _Topolgies_ et copier dans _https://zz85.github.io/kafka-streams-viz/_
+
+**`git checkout -f stream-join`**
+
+1. Lancer `ReferentielProducerApplication` et `ProducerApplication`
+
+2. Lancer `StreamApplication` et visualiser la _Topolgie_ (_https://zz85.github.io/kafka-streams-viz/_)
+
+3. Observez les messages dans la topic _output_
+
+
