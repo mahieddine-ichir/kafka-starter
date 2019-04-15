@@ -43,4 +43,6 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 
 3. Observez les messages dans la topic _output_
 
+4. remplacez le `leftJoin` dans le stream par un `join` ... quelle est la différence ?
+
 
