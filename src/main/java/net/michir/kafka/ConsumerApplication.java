@@ -39,7 +39,9 @@ public class ConsumerApplication {
                         Envelope envelope = null;
                         try {
                             envelope = objectMapper.readValue(value, Envelope.class);
-                            System.out.println("Received: key="+key+", value="+envelope+", from partition "+record.partition());
+                            System.out.println("Received: partition="+record.partition()+"," +
+                                    " key="+key+"," +
+                                    " value="+envelope);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
