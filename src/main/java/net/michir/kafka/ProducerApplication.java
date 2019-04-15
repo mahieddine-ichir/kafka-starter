@@ -30,9 +30,9 @@ public class ProducerApplication {
 
         String topic = "test-topic";
 
-        int i = (int) Math.floor(Math.random() * envelopes.size() - 1);
         while (true) {
 
+            int i = (int) Math.floor(Math.random() * (envelopes.size() - 1));
             Envelope envelope = envelopes.get(i);
             envelope.setStatus(Envelope.State.values()[i%Envelope.State.values().length]);
             String value = objectMapper.writeValueAsString(envelope);
@@ -41,7 +41,6 @@ public class ProducerApplication {
             ProducerRecord<Integer, String> record = new ProducerRecord<>(topic, envelope.getId(), value);
 
             producer.send(record);
-            i++;
             Thread.sleep(3000);
         }
     }
