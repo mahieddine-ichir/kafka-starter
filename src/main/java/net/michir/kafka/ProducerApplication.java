@@ -16,7 +16,7 @@ public class ProducerApplication {
 
     static List<Envelope> envelopes = new ArrayList<>();
     private static ObjectMapper objectMapper = new ObjectMapper();
-
+    public static final String TOPIC = "test-topic";
 
     public static void main(String[] args) throws InterruptedException, JsonProcessingException {
 
@@ -28,20 +28,17 @@ public class ProducerApplication {
 
         KafkaProducer<Integer, String> producer = new KafkaProducer<Integer, String>(properties);
 
-        String topic = "test-topic";
-
-        int i = (int) Math.floor(Math.random() * envelopes.size() - 1);
         while (true) {
 
+            int i = (int) Math.floor(Math.random() * (envelopes.size() - 1));
             Envelope envelope = envelopes.get(i);
             envelope.setStatus(Envelope.State.values()[i%Envelope.State.values().length]);
             String value = objectMapper.writeValueAsString(envelope);
 
+            ProducerRecord<Integer, String> record = new ProducerRecord<>(TOPIC, envelope.getId(), value);
             System.out.println("Sending "+envelope);
-            ProducerRecord<Integer, String> record = new ProducerRecord<>(topic, envelope.getId(), value);
 
             producer.send(record);
-            i++;
             Thread.sleep(3000);
         }
     }
