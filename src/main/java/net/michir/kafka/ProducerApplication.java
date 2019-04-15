@@ -17,6 +17,7 @@ public class ProducerApplication {
     static List<Envelope> envelopes = new ArrayList<>();
     private static ObjectMapper objectMapper = new ObjectMapper();
     public static final String TOPIC = "test-topic";
+    public static final String TOPIC_COMPRESSED = "test-topic-compressed";
 
     public static void main(String[] args) throws InterruptedException, JsonProcessingException {
 
@@ -26,8 +27,14 @@ public class ProducerApplication {
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
-        KafkaProducer<Integer, String> producer = new KafkaProducer<Integer, String>(properties);
+        KafkaProducer<Integer, String> producer = new KafkaProducer<>(properties);
 
+        Properties propertiesForCompressed = new Properties();
+        propertiesForCompressed.putAll(properties);
+        propertiesForCompressed.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
+        KafkaProducer<Integer, String> producerForCompressed = new KafkaProducer<>(propertiesForCompressed);
+
+        int numberOfMessages = 0;
         while (true) {
 
             int i = (int) Math.floor(Math.random() * (envelopes.size() - 1));
@@ -35,11 +42,17 @@ public class ProducerApplication {
             envelope.setStatus(Envelope.State.values()[i%Envelope.State.values().length]);
             String value = objectMapper.writeValueAsString(envelope);
 
-            ProducerRecord<Integer, String> record = new ProducerRecord<>(TOPIC, envelope.getId(), value);
             System.out.println("Sending "+envelope);
+            // un-compressed
+            producer.send(new ProducerRecord<>(TOPIC, envelope.getId(), value));
+            // compressed
+            producerForCompressed.send(new ProducerRecord<>(TOPIC_COMPRESSED, envelope.getId(), value));
 
-            producer.send(record);
-            Thread.sleep(3000);
+           // Thread.sleep(1);
+
+            if ((++numberOfMessages) > 10000) {
+                break;
+            }
         }
     }
 
