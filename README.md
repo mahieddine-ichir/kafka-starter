@@ -41,8 +41,8 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 
 2. Lancer `StreamApplication` et visualiser la _Topolgie_ (_https://zz85.github.io/kafka-streams-viz/_)
 
-3. Observez les messages dans la topic _output_
+3. Observer les messages dans la topic _output_
 
-4. remplacez le `leftJoin` dans le stream par un `join` ... quelle est la différence ?
+4. remplacer le `leftJoin` dans le stream par un `join` ... quelle est la différence ?
 
 
