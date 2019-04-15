@@ -32,6 +32,7 @@ public class ProducerApplication {
         Properties propertiesForCompressed = new Properties();
         propertiesForCompressed.putAll(properties);
         propertiesForCompressed.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
+        //propertiesForCompressed.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
         KafkaProducer<Integer, String> producerForCompressed = new KafkaProducer<>(propertiesForCompressed);
 
         int numberOfMessages = 0;
