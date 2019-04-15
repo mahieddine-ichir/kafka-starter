@@ -25,6 +25,8 @@ public class ProducerApplication {
 
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        //properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 32*1024*1024);
+        //properties.put(ProducerConfig.LINGER_MS_CONFIG, 100);
 
         KafkaProducer<Integer, String> producer = new KafkaProducer<Integer, String>(properties);
 
@@ -39,7 +41,7 @@ public class ProducerApplication {
             System.out.println("Sending "+envelope);
 
             producer.send(record);
-            Thread.sleep(3000);
+            Thread.sleep(100);
         }
     }
 

@@ -18,5 +18,3 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 2. Exécuter plusieurs fois le `ConsumerApplication` et observer la sortie standard.
 
 
-
-
