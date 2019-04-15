@@ -25,31 +25,14 @@ public class StreamApplication {
 
         StreamsBuilder streamsBuilder = new StreamsBuilder();
 
-        GlobalKTable<String, String> referentiel = streamsBuilder.globalTable(ReferentielProducerApplication.REFERENTIEL,
-                Materialized.<String, String, KeyValueStore<Bytes, byte[]>>as(REFERENTIAL_STORE)
-                    .withKeySerde(Serdes.String())
-                    .withValueSerde(Serdes.String())
-        );
-
         KStream<Integer, Envelope> stream = streamsBuilder.stream(ProducerApplication.TOPIC, Consumed.with(Serdes.Integer(), new JsonSerdes()));
-        stream
-                .leftJoin(referentiel, (key, value) -> {
-                    return value.getStatus().toString();
-                }, (left, right) -> {
-                    left.setLibelle(right);
-                    return left;
-                })
-                .to("output", Produced.with(Serdes.Integer(), new JsonSerdes()));
-
+        // stream.
 
         Topology topology = streamsBuilder.build();
         System.out.println(topology.describe());
 
         KafkaStreams kafkaStreams = new KafkaStreams(topology, properties);
         kafkaStreams.start();
-
-        //ReadOnlyKeyValueStore<Object, Object> store = kafkaStreams.store(ReferentialApplication.REFERENTIAL_STORE, QueryableStoreTypes.keyValueStore());
-        //System.out.println(store.get(Envelope.State.CREE.name()));
 
         Runtime.getRuntime().addShutdownHook(new Thread(kafkaStreams::close));
     }

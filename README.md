@@ -45,4 +45,6 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 
 4. remplacer le `leftJoin` dans le stream par un `join` ... quelle est la différence ?
 
+**`git checkout -f stream-aggregate`**
 
+1. Ecrire un stream qui permet d'avoir la somme des enveloppes par état. 
