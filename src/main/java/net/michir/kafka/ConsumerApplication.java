@@ -6,7 +6,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -26,7 +25,6 @@ public class ConsumerApplication {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-test-app");
 
-        String topic = "test-topic";
         KafkaConsumer<Integer, String> consumer = new KafkaConsumer<>(properties);
         consumer.subscribe(Collections.singletonList(ProducerApplication.TOPIC));
 
