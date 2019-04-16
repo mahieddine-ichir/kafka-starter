@@ -28,7 +28,8 @@ public class ProducerApplication {
         //properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 32*1024*1024);
         //properties.put(ProducerConfig.LINGER_MS_CONFIG, 100);
 
-        KafkaProducer<Integer, String> producer = new KafkaProducer<Integer, String>(properties);
+        KafkaProducer<Integer, String> producer = new KafkaProducer<>(properties);
+        Runtime.getRuntime().addShutdownHook(new Thread(producer::close));
 
         while (true) {
 
