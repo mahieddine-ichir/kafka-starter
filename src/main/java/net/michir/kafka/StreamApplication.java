@@ -30,6 +30,7 @@ public class StreamApplication {
                 .mapValues((readOnlyKey, value) -> toEnvelope(value))
                 .filterNot((key, value) -> value == null)
                 .filter((key, value) -> value.getStatus() == Envelope.State.NPAI)
+                .mapValues((key, value) -> toString(value))
                 .to("output");
 
         Topology topology = streamsBuilder.build();
@@ -44,6 +45,15 @@ public class StreamApplication {
     private static Envelope toEnvelope(String value) {
         try {
             return OBJECT_MAPPER.readValue(value, Envelope.class);
+        } catch (IOException ignored) {
+            //e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String toString(Envelope envelope) {
+        try {
+            return OBJECT_MAPPER.writeValueAsString(envelope);
         } catch (IOException ignored) {
             //e.printStackTrace();
             return null;
