@@ -30,9 +30,7 @@ public class StreamApplication {
                 .mapValues((readOnlyKey, value) -> toEnvelope(value))
                 .filterNot((key, value) -> value == null)
                 .filter((key, value) -> value.getStatus() == Envelope.State.NPAI)
-                .foreach((key, value) -> System.out.println("key="+key+", value="+value)
-        );
-
+                .to("output");
 
         Topology topology = streamsBuilder.build();
         System.out.println(topology.describe());
