@@ -1,13 +1,12 @@
 package net.michir.kafka;
 
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.*;
-import org.apache.kafka.streams.state.KeyValueStore;
+import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.KStream;
 
 import java.util.Properties;
 
@@ -26,7 +25,14 @@ public class StreamApplication {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
 
         KStream<Integer, Envelope> stream = streamsBuilder.stream(ProducerApplication.TOPIC, Consumed.with(Serdes.Integer(), new JsonSerdes()));
-        // stream.
+        stream.selectKey((key, value) -> value.getStatus())
+                .groupByKey()
+                .aggregate(EnvelopeSummary::new, (key, value, aggregate) -> {
+                    aggregate.setCount(aggregate.getCount()+1);
+                    return aggregate;
+                })
+                .toStream()
+                .to("output");
 
         Topology topology = streamsBuilder.build();
         System.out.println(topology.describe());
