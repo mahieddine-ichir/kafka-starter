@@ -78,3 +78,9 @@ curl -vX POST localhost:8083/connectors -H "Content-Type: application/json" -d @
 curl -vX POST localhost:8083/connectors -H "Content-Type: application/json" -d @jdbc-source.json
 ```
 
+4. Démarrer le `ProducerApplication` et `StreamApplication`
+
+5. Observer les topics `counts`, `output`, `nvelope_labels`, `test-sqlite-jdbc-envelope_labels`
+
+6. Regarder le contenu de la table `counts` dans la base `test-connect-output.db`
+
