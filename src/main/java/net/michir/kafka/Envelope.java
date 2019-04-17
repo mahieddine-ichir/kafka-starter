@@ -17,15 +17,9 @@ public class Envelope {
 
     private Date creationDate = new Date();
 
-    private State status = State.CREE;
+    private State status;
 
     private PostalAddress postalAddress;
 
-
-    public enum State {
-        CREE,
-        ENVOYEE,
-        RECUE,
-        NPAI
-    }
+    private String label;
 }

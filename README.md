@@ -34,3 +34,40 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 1. Lancer `StreamApplication`
 
 2. Copier la sortie console sous _Topolgies_ et copier dans _https://zz85.github.io/kafka-streams-viz/_
+
+**`git checkout -f connect-jdbc`**
+
+1. Lancer 
+```
+sqlite3 test-connect-output.db
+```
+et créer le schéma
+```
+CREATE TABLE envelope_labels (id INTEGER PRIMARY KEY Autoincrement NOT NULL, name varchar(32), label varchar(255));
+```
+
+2. Lancer 
+```
+sqlite3 test-connect-output.db
+```
+et créer le schéma
+```
+CREATE TABLE counts (id INTEGER PRIMARY KEY Autoincrement NOT NULL, name varchar(32), count integer);
+```
+
+3. Lancer, _kafka-connect_ 
+
+```
+bin/confluent start connect
+``` 
+
+et installer les deux connecteurs (sink et source)
+
+```
+curl -vX POST localhost:8083/connectors -H "Content-Type: application/json" -d @jdbc-sink.json
+```
+
+```
+curl -vX POST localhost:8083/connectors -H "Content-Type: application/json" -d @jdbc-source.json
+```
+
