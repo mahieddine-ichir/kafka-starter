@@ -46,6 +46,13 @@ et créer le schéma
 CREATE TABLE envelope_labels (id INTEGER PRIMARY KEY Autoincrement NOT NULL, name varchar(32), label varchar(255));
 ```
 
+Insérer quelques lignes, par exemple :
+
+```
+insert into envelope_labels (name, label) values ('ENVOYEE', 'Courrier envoyé');
+insert into envelope_labels (name, label) values ('NPAI', 'Addresse inconnue');
+```
+
 2. Lancer 
 ```
 sqlite3 test-connect-output.db
