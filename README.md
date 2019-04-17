@@ -39,7 +39,7 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 
 1. Lancer 
 ```
-sqlite3 test-connect-output.db
+sqlite3 test-connect.db
 ```
 et créer le schéma
 ```
